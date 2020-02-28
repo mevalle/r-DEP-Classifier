@@ -98,7 +98,7 @@ AllDataSets.sort(key=GetSize)
 
 try: 
     os.path.isdir("CSVs")
-exceot:
+except:
     os.mkdir("CSVs")
 
 data = pd.DataFrame()
