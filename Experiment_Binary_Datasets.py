@@ -1,27 +1,22 @@
+import os
 import time
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
 from sklearn import datasets
-from sklearn.preprocessing import StandardScaler, RobustScaler
+from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import BaggingClassifier, VotingClassifier
 from sklearn.pipeline import make_pipeline
 from sklearn.base import clone
 
 from sklearn.svm import SVC
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.dummy import DummyClassifier
 
 from sklearn.impute import SimpleImputer
 from sklearn.model_selection import cross_val_score, train_test_split, StratifiedKFold
-from sklearn.metrics import cohen_kappa_score, confusion_matrix, f1_score, roc_auc_score, balanced_accuracy_score
+from sklearn.metrics import balanced_accuracy_score
 
-import load_dataset
-from MPCL import MPCL
 from rDEP import DEP, EnsembleTransform
-from HoTdiagram import HoTdiagram
 
 def EvalClassifiers(Name, Classifiers, X, y, n_splits=10, score = balanced_accuracy_score):
     df = pd.DataFrame()
@@ -96,17 +91,15 @@ AllDataSets = [
     ("Blood Transfusion","blood-transfusion-service-center",1),
     ("Steel Plates Fault","steel-plates-fault",1),
     ("Sick","sick",1)
-#     Large Datasets
-#     ("Adult","Adult",2),
-#     ("Cover Type","covertype",2),
-#     ("Bank Marketing","bank-marketing",1),
-#     ("Adult Census","adult-census",1),
-#     ("Gisette","gisette",2),
     ]
 
 # Sort datasets from number of samples
 AllDataSets.sort(key=GetSize)
 
+try: 
+    os.path.isdir("CSVs")
+exceot:
+    os.mkdir("CSVs")
 
 data = pd.DataFrame()
 for name, dataset, version in AllDataSets:
@@ -120,7 +113,3 @@ for name, dataset, version in AllDataSets:
     data = pd.concat([data,df])
     data.to_csv("CSVs/BinaryDataSets.csv")
     print("\nTime to process the dataset: %2.2f seconds." % (time.time() - start_time))
-
-# plt.figure(figsize=(10, 8))
-# HoTdiagram(df, PlotName = "BinaryDatasets", significance_level = 0.95, Gaussian = False, NormalizeData=False)
-# df.mean()
