@@ -50,14 +50,10 @@ Classifiers = [("Linear SVC",SVC(kernel="linear",gamma="scale")),
                ("Poly SVC",SVC(kernel="poly",gamma="scale")),
                ("SVC Ensemble",VotingSVC),
                ("Bagging SVC",BaggingSVC),
-               ("MPCL",MPCL(Nsamples=0)), 
                ("DEP",DEP()),
                ("r-DEP (Ensemble)",make_pipeline(EnsembleTransform(VotingSVC),StandardScaler(),DEP())),
                ("r-DEP (Bagging)",make_pipeline(EnsembleTransform(BaggingSVC),StandardScaler(),DEP())),
               ]
-
-def GetSize(dataset):
-    return datasets.fetch_openml(dataset[1],version=dataset[2],return_X_y = True)[0].shape[0]
 
 AllDataSets = [
     ("Breast Cancer Wisconsin","wdbc",1),
@@ -93,13 +89,9 @@ AllDataSets = [
     ("Sick","sick",1)
     ]
 
-# Sort datasets from number of samples
-AllDataSets.sort(key=GetSize)
-
-try: 
-    os.path.isdir("CSVs")
-except:
+if not os.path.exists("CSVs"):
     os.mkdir("CSVs")
+    print("The directory CSVs has been created.")
 
 data = pd.DataFrame()
 for name, dataset, version in AllDataSets:
