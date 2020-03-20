@@ -23,7 +23,9 @@ The rDEP module require and have been tested using the following modules and ver
 * sklearn: 0.21.2
 * cvxpy: 1.0.25
 * dccp: 1.0.0
-We also used the MOSEK solver, version 9.1.13, which can be obtained at https://www.mosek.com/. Other solvers can be used instead of the MOSEK. For example, one can use the CVXOPT solver which is available on cvxpy but, unfortunately, is very slow making it inappropriate to solve medium and large scale problems.  
+* MOSEK: 9.1.13
+
+*Remark:* We used MOSEK, which can be obtained at https://www.mosek.com/, as the default solver for the convex-concave optimization problem. Other solvers can be used instead of the MOSEK. For example, the CVXOPT solver which is available on cvxpy can be used but, unfortunately, this solver is very slow making it inappropriate for medium and large scale problems.  
 
 ## Usage of the DEP classifier
 
