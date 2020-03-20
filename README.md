@@ -10,18 +10,28 @@ Using several binary classification datasets from the OpenML repository, the ens
 
 This repository contain the python source-codes of reduced dilation-erosion perceptron (r-DEP) classifier, as described in the paper "Reduced Dilation-Erosion Perceptron for Binary Classification" by Marcos Eduardo Valle (see ArXiv paper). The Jupyter-notebook of an example is available in this repository. The source-code of the computational experiment considering 30 binary classification tasks is also available.
 
-## Usage
+## Usage and required modules
 
 Import the DEP classifier and the reduced mapping transform using:
 ```
 from rDEP import DEP, EnsembleTransform 
 ```
+The rDEP module require and have been tested using the following modules and versions:
+* python: 3.7.3 
+* numpy: 1.16.2
+* matplotlib: 3.1.0
+* sklearn: 0.21.2
+* cvxpy: 1.0.25
+* dccp: 1.0.0
+We also used the MOSEK solver, version 9.1.13, which can be obtained at https://www.mosek.com/. Other solvers can be used instead of the MOSEK. For example, one can use the CVXOPT solver which is available on cvxpy but, unfortunately, is very slow making it inappropriate to solve medium and large scale problems.  
+
 ## Usage of the DEP classifier
 
 The DEP classifier is compatible with scikit-learn API. You create a DEP classifier with the command:
 ```
 clf = DEP(weighted = True, ref = "maximum", C = 1.e-2, 
-                 beta = None, beta_loss = "hinge", Split2Beta = False, verbose = False)
+                 beta = None, beta_loss = "hinge", Split2Beta = False, 
+                 solver = cp.Mosek, verbose = False)
 ```
 where all the parameters are optimal (the default values are specified above). 
 ### Parameters:
@@ -32,6 +42,7 @@ where all the parameters are optimal (the default values are specified above).
    * *beta*: None (default) or a float between 0 and 1. Beta determines the convex combination of the dilation and erosion. A minimization procedure is used to find determine beta when it is None.
    * *beta_loss*: "hinge" (default) or "squared_hinge". Hinge or squared hinge loss functions are used to determine beta when its value is not provided (beta = None).
    * *Split2Beta*: False (default) or True. If True, the training data is splited into 3 stratified folds. Two folds are used to determine the synaptic weights while the remaining is used to determine beta. The whole training set is used to determine both synaptic weights and beta when Split2Beta is False.
+   * *solver*: Solver used to solve the convex-concave optimization problem. Default solver = cp.Mosek. The option solver = cp.CVXOPT is an alternative but it will take long time to solve medium and large optimization problems.  
    * *verbose*: False (default) or True. Enable verbose output.
 
 ### Attributes:
