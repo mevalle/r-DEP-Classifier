@@ -65,8 +65,10 @@ class EnsembleTransform(TransformerMixin, BaseEstimator):
 class DEP(BaseEstimator, ClassifierMixin):
     
     def __init__(self, weighted = True, ref = "maximum", C = 1.e-2, 
-                 beta = None, beta_loss = "hinge", Split2Beta = False, verbose = False):
+                 beta = None, beta_loss = "hinge", Split2Beta = False, 
+                 solver = cp.MOSEK, verbose = False):
         self.verbose = verbose
+        self.solver = solver
         self.weighted = weighted
         self.ref = ref
         self.C = C
@@ -135,7 +137,7 @@ class DEP(BaseEstimator, ClassifierMixin):
         constraintsDil = [ZposDil >= -xiPos, ZnegDil <= xiNeg]
 
         probDil = cp.Problem(objectiveDil,constraintsDil)            
-        probDil.solve(solver=cp.MOSEK, method = 'dccp', verbose = self.verbose)
+        probDil.solve(solver=self.solver, method = 'dccp', verbose = self.verbose)
         self.dil_ = (w.value).flatten()
         
         # Solve DCCP problem for erosion
@@ -160,7 +162,7 @@ class DEP(BaseEstimator, ClassifierMixin):
         constraintsEro = [ZposEro >= -etaPos, ZnegEro <= etaNeg]
 
         probEro = cp.Problem(objectiveEro,constraintsEro)            
-        probEro.solve(solver=cp.MOSEK, method = 'dccp', verbose = self.verbose)
+        probEro.solve(solver=self.solver, method = 'dccp', verbose = self.verbose)
         self.ero_ = (m.value).flatten()
         
         # Fine tune beta
