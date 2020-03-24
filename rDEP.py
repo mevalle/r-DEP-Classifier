@@ -254,6 +254,6 @@ class DEP(BaseEstimator, ClassifierMixin):
             Vertices = np.array([box[0][ind],[box[1][ind[0]],box[0][ind[1]]],box[1][ind],[box[0][ind[0]],box[1][ind[1]]]])
             plt.gca().add_patch(Polygon(Vertices, alpha = 0.3, color=sc.to_rgba(1)))
     
-        plt.grid("True")
+        plt.grid(True)
         plt.xlabel("Variable %d" % ind[0])
         plt.ylabel("Variable %d" % ind[1])
